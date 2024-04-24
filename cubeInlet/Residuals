@@ -1,0 +1,13 @@
+set border lw 4
+set logscale y
+set title "Residuals" font "arial,22"
+set ylabel "Residual" font "arial,18"
+set xlabel "TimeStep" font "arial,18"
+set key width 1
+plot "< cat log | grep 'Solving for Ux' | grep -oE 'Final residual = [0-9.e+-]+' | cut -d' ' -f4" title 'Ux' with lines lw 4,\
+"< cat log | grep 'Solving for Uy' | grep -oE 'Final residual = [0-9.e+-]+' | cut -d' ' -f4" title 'Uy' with lines lw 4,\
+"< cat log | grep 'Solving for Uz' | grep -oE 'Final residual = [0-9.e+-]+' | cut -d' ' -f4" title 'Uz' with lines lw 4,\
+"< cat log | grep 'Solving for p' | grep -oE 'Final residual = [0-9.e+-]+' | cut -d' ' -f4" title 'p' with lines lw 4
+pause 1
+reread
+

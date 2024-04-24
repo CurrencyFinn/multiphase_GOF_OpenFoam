@@ -1,0 +1,235 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  dev
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+castellatedMesh true;
+
+snap            true;
+
+addLayers       false;
+
+geometry
+{
+
+    cylinder.stl
+    {
+
+        type triSurfaceMesh;
+
+        name cylinder;
+    }
+  }
+
+
+
+
+castellatedMeshControls
+{
+
+    maxLocalCells 1000000;
+
+    maxGlobalCells 20000000;
+
+    minRefinementCells 0;
+
+    maxLoadUnbalance 0.10;
+
+    nCellsBetweenLevels 4;
+
+    features
+
+    (
+      {
+          file "cylinder.eMesh";
+          level 0;
+      }
+
+    );
+
+    refinementSurfaces
+
+    {
+
+        cylinder
+        {
+
+            level (3 3);     
+            patchInfo
+            {
+              type wall;
+              inGroups (cylinders);
+            }
+
+        }
+
+    }
+
+    resolveFeatureAngle 30;
+
+    planarAngle 30;
+
+
+    refinementRegions
+
+    {
+
+    }
+
+    allowFreeStandingZoneFaces true;
+    locationInMesh (0.1 0.1 0.1);
+
+}
+
+
+addLayersControls
+{
+    // Are the thickness parameters below relative to the undistorted
+    // size of the refined cell outside layer (true) or absolute sizes (false).
+    relativeSizes true;
+
+    // Per final patch (so not geometry!) the layer information
+    layers
+    {
+        cylinder
+        {
+            nSurfaceLayers 20; //this is the number of layers
+        }
+    }
+
+    // Expansion factor for layer mesh
+    expansionRatio 1.5; //this is the height of a layer as the ration against the adjacent layer cell
+
+    //- Wanted thickness of final added cell layer. If multiple layers
+    //  is the
+    //  thickness of the layer furthest away from the wall.
+    //  Relative to undistorted size of cell outside layer.
+    //  is the thickness of the layer furthest away from the wall.
+    //  See relativeSizes parameter.
+    finalLayerThickness 1; //height of the last layer as the ratio against the adjacent "regular" mesh cells
+
+    //- Minimum thickness of cell layer. If for any reason layer
+    //  cannot be above minThickness do not add layer.
+    //  Relative to undistorted size of cell outside layer.
+    minThickness 0.1;
+
+    //- If points get not extruded do nGrow layers of connected faces that are
+    //  also not grown. This helps convergence of the layer addition process
+    //  close to features.
+    // Note: changed(corrected) w.r.t 17x! (didn't do anything in 17x)
+    nGrow -1;
+
+    // Advanced settings
+
+    //- When not to extrude surface. 0 is flat surface, 90 is when two faces
+    //  make straight angle.
+    featureAngle 180;
+
+    //- Maximum number of snapping relaxation iterations. Should stop
+    //  before upon reaching a correct mesh.
+    nRelaxIter 3;
+
+    // Number of smoothing iterations of surface normals
+    nSmoothSurfaceNormals 1;
+
+    // Number of smoothing iterations of interior mesh movement direction
+    nSmoothNormals 3;
+
+    // Smooth layer thickness over surface patches
+    nSmoothThickness 10;
+
+    // Stop layer growth on highly warped cells
+    maxFaceThicknessRatio 1000;
+
+    // Reduce layer growth where ratio thickness to medial
+    // distance is large
+    maxThicknessToMedialRatio 0.3;
+
+    // Angle used to pick up medial axis points
+    // Note: changed(corrected) w.r.t 17x! 90 degrees corresponds to 130 in 17x.
+    minMedialAxisAngle 90;
+
+    maxThicknessToMedialRatio 0.3;
+
+    nMedialAxisIter    10;
+
+    slipFeatureAngle 10;
+
+
+    // Create buffer region for new layer terminations
+    nBufferCellsNoExtrude 0;
+
+
+    // Overall max number of layer addition iterations. The mesher will exit
+    // if it reaches this number of iterations; possibly with an illegal
+    // mesh.
+    nLayerIter 50;
+
+    nRelaxedIter 0;
+}
+
+  meshQualityControls
+{
+    #include "meshQualityDict"
+
+    minDeterminant 1e-8;
+
+    relaxed
+    {
+        // Maximum non-orthogonality allowed. Set to 180 to disable.
+        maxNonOrtho 75;
+        minTetQuality -1e30;
+        minTwist    -1;
+    }
+
+    // Advanced
+
+      // Number of error distribution iterations
+      nSmoothScale 4;
+      // amount to scale back displacement at error points
+      errorReduction 0.75;
+
+}
+  
+   
+  
+  snapControls
+  
+  {
+  
+      nSmoothPatch 3;
+  
+      tolerance 1.0;
+  
+      nSolveIter 30;
+  
+      nRelaxIter 5;
+
+      nFeatureSnapIter 10;
+  
+      implicitFeatureSnap false;
+
+      explicitFeatureSnap true;
+
+      multiRegionFeatureSnap false;
+
+      strictRegionSnap true;
+  }
+
+
+mergeTolerance 1e-6;
+
+debug 0;
