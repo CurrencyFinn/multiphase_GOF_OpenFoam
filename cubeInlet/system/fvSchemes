@@ -16,7 +16,7 @@ FoamFile
 
 ddtSchemes
 {
-    default         Euler;
+    default         localEuler;
 }
 
 gradSchemes
@@ -27,7 +27,8 @@ gradSchemes
 divSchemes
 {
     default         none;
-    div(phi,U)      Gauss limitedLinearV 1;
+    div((nuEff*dev2(T(grad(U))))) Gauss linear;
+    div(phi,U)      Gauss linear; //Gauss limitedLinearV 1
 }
 
 laplacianSchemes

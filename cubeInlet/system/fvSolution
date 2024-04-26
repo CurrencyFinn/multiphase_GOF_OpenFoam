@@ -33,16 +33,35 @@ solvers
     U
     {
         solver          smoothSolver;
-        smoother        symGaussSeidel;
+        smoother        GaussSeidel;
         tolerance       1e-05;
+        relTol          0.1;
+    }
+    UFinal
+    {
+        $U;
         relTol          0;
     }
+
 }
 
-PISO
+PIMPLE
 {
-    nCorrectors     2;
-    nNonOrthogonalCorrectors 2;
+    nNonOrthogonalCorrectors 0;
+    nCorrectors         2; // finding solution for pressure
+    nOuterCorrectors    50; // no. of iterations over the non-linear coupling
+    pRefCell        0;
+    pRefValue       0;
+    momentumPredictor   false;
+
+    residualControl  
+    {
+        p
+		{
+            tolerance	 1e-4;
+            relTol 	     0;
+		}
+    }
 }
 
 // ************************************************************************* //
