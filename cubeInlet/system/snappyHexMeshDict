@@ -67,7 +67,7 @@ castellatedMeshControls
         cylinder
         {
 
-            level (3 3);     
+            level (2 2);     
             patchInfo
             {
               type wall;
@@ -90,7 +90,7 @@ castellatedMeshControls
     }
 
     allowFreeStandingZoneFaces true;
-    locationInMesh (0.1 0.1 0.1);
+    locationInMesh (0.1e-6 0.1e-6 0.1e-6);
 
 }
 
@@ -106,7 +106,7 @@ addLayersControls
     {
         cylinder
         {
-            nSurfaceLayers 20; //this is the number of layers
+            nSurfaceLayers 1; //this is the number of layers
         }
     }
 
@@ -119,7 +119,7 @@ addLayersControls
     //  Relative to undistorted size of cell outside layer.
     //  is the thickness of the layer furthest away from the wall.
     //  See relativeSizes parameter.
-    finalLayerThickness 1; //height of the last layer as the ratio against the adjacent "regular" mesh cells
+    finalLayerThickness 0.5; //height of the last layer as the ratio against the adjacent "regular" mesh cells
 
     //- Minimum thickness of cell layer. If for any reason layer
     //  cannot be above minThickness do not add layer.

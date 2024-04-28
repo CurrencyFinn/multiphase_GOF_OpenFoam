@@ -49,17 +49,21 @@ PIMPLE
 {
     nNonOrthogonalCorrectors 0;
     nCorrectors         2; // finding solution for pressure
-    nOuterCorrectors    50; // no. of iterations over the non-linear coupling
+    nOuterCorrectors    1; // no. of iterations over the non-linear coupling
     pRefCell        0;
     pRefValue       0;
     momentumPredictor   false;
+    maxCo               10;
+    rDeltaTSmoothingCoeff 0.05;
+    rDeltaTDampingCoeff 0.5;
+    maxDeltaT           1;
 
     residualControl  
     {
         p
 		{
-            tolerance	 1e-4;
-            relTol 	     0;
+            tolerance	 1e-5;
+            relTol 	     0.05;
 		}
     }
 }

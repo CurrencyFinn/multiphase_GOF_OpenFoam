@@ -1,0 +1,67 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2312                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    p
+    {
+        solver          GAMG;
+        smoother        GaussSeidel;
+        tolerance       1e-06;
+        relTol          0.05;
+    }
+
+    pFinal
+    {
+        $p;
+        relTol          0;
+    }
+
+    U
+    {
+        solver          smoothSolver;
+        smoother        GaussSeidel;
+        tolerance       1e-05;
+        relTol          0.1;
+    }
+    UFinal
+    {
+        $U;
+        relTol          0;
+    }
+
+}
+
+PIMPLE
+{
+    nNonOrthogonalCorrectors 0;
+    nCorrectors         2; // finding solution for pressure
+    nOuterCorrectors    10; // no. of iterations over the non-linear coupling
+    pRefCell        0;
+    pRefValue       0;
+    momentumPredictor   false;
+
+    residualControl  
+    {
+        p
+		{
+            tolerance	 1e-6;
+            relTol 	     0.001;
+		}
+    }
+}
+
+// ************************************************************************* //

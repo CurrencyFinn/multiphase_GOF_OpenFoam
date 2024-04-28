@@ -38,7 +38,7 @@ solution
 
 constantProperties
 {
-    rho0            1.2;           // particle density (kg/m3)
+    rho0            950;           // particle density (kg/m3)
     //youngsModulus   6e8;   // constant of proportionality relating the deformation to the applied stress for your particles (N/m2)
     //poissonsRatio   0.35;    // ratio of traverse to axial strain for your particles (dimensionless)
     constantVolume  true;
@@ -50,63 +50,11 @@ subModels
     {
         sphereDrag;
         gravity;
+        //BrownianMotion;
     }
 
     injectionModels
     {
-        // model1
-        // {
-        //     type            patchFlowRateInjection;
-        //     patch           inlet-velocity;
-        //     patchName       inlet-velocity;
-        //     duration        0.01;                   //Total duration of particle injection
-        //     concentration   1;                    // Concentration profile of particle volume to carrier volume   
-        //     parcelConcentration 0.6;
-        //     parcelsPerSecond    500;                //Injected parcels/particles per second
-        //     meanParticleDiameter 0.003;  
-        //     nParticle        1000;                    // number of particles to be injected
-        //     massTotal       0.05;                      //total mass to be injected (kg)
-        //     parcelBasisType fixed;                  // options of how to represent your particles. besides 'fixed' they can be represented by 'number' or 'mass'
-        //     SOI             0;                      //start of injection (time in [s])
-        //     sizeDistribution
-        //     {
-        //         type        fixedValue;             // particle have fixed sizes Yes
-        //          fixedValueDistribution             // the sizes the particels can have ? Yes. Instead of specifying each individual size you could use a size distribution profile i.e. type normal;
-        //         {
-        //             value   0.003;             
-        //             // value   0.01;
-        //             // value   0.001;
-        //             // value   0.015;
-        //             // value   0.004;
-        //             // value   0.009;
-        //         }
-        //     }
-        // }
-
-        // model1
-        // {
-        //     type patchInjection;
-        //     parcelBasisType mass; // mass = , number np = massTotal/(rho*volumeTotal), fixed np = number of particles
-        //     patchName inlet-velocity;
-        //     patch inlet-velocity;       
-        //     maxParticlesPerParcel 1;      
-        //     U0 (0 0 0);
-        //     nParticle 1;    
-        //     parcelsPerSecond 500;
-        //     sizeDistribution
-        //             {
-        //                 type        fixedValue;
-        //                 fixedValueDistribution
-        //                 {
-        //                     value   0.01;
-        //                 }
-        //             }
-        //     flowRateProfile constant 1;
-        //     massTotal 0.3;  //Choosing nParticle to be a fixed value, massTotal variable now             does not determine anything.
-        //     SOI 0;
-        //     duration 0.1;
-        //     massFlowRate 0.01;//0.0001;//0.004583;
-        // }
         model1
         {
             type patchInjection;
@@ -121,11 +69,11 @@ subModels
                         type        fixedValue;
                         fixedValueDistribution
                         {
-                            value   0.01;
+                            value   6e-7;
                         }
                     }
             flowRateProfile constant 1;
-            massTotal 0;  //Choosing nParticle to be a fixed value, massTotal variable now             does not determine anything.
+            massTotal 0;  //Choosing nParticle to be a fixed value, massTotal not used
             SOI 0;
             duration 0.1;
         }
@@ -143,15 +91,16 @@ subModels
                 type stick;
             }
 
-            pressure-outlet {
-                type escape;
-            }
             ".*"
             {
-                type rebound;  // For Un = normal speed; Ut = tangential speed
-                e    1;        // e = (Un_reflected / Un_incident)
-                mu   0;        // mu = [1 - (Ut_reflected / Ut_incident)]
+                type escape;  
             }
+            // ".*"
+            // {
+            //     type rebound;  // For Un = normal speed; Ut = tangential speed
+            //     e    1;        // e = (Un_reflected / Un_incident)
+            //     mu   0;        // mu = [1 - (Ut_reflected / Ut_incident)]
+            // }
         );
     }
 

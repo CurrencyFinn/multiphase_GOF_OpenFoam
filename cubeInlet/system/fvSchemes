@@ -21,14 +21,16 @@ ddtSchemes
 
 gradSchemes
 {
-    default         Gauss linear;
+    default         cellLimited Gauss linear 0.5;
+    grad(U)         cellLimited Gauss linear 0.8;
+
 }
 
 divSchemes
 {
     default         none;
     div((nuEff*dev2(T(grad(U))))) Gauss linear;
-    div(phi,U)      Gauss linear; //Gauss limitedLinearV 1
+    div(phi,U)      Gauss linearUpwind grad(U);
 }
 
 laplacianSchemes

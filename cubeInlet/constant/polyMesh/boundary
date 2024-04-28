@@ -21,28 +21,28 @@ FoamFile
     inlet-velocity
     {
         type            patch;
-        nFaces          1600;
-        startFace       1395540;
+        nFaces          2500;
+        startFace       613466;
     }
     walls
     {
         type            wall;
         inGroups        1(wall);
-        nFaces          9560;
-        startFace       1397140;
+        nFaces          10868;
+        startFace       615966;
     }
     pressure-outlet
     {
         type            patch;
-        nFaces          1600;
-        startFace       1406700;
+        nFaces          2500;
+        startFace       626834;
     }
     cylinder
     {
         type            wall;
         inGroups        2(cylinders wall);
-        nFaces          58880;
-        startFace       1408300;
+        nFaces          12000;
+        startFace       629334;
     }
 )
 
